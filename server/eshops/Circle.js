@@ -7,22 +7,22 @@ const cheerio = require('cheerio');
  * @return {Array} products
  */
 const parse = data => {
-  setTimeout(() => {}, 450000);
   const $ = cheerio.load(data);
 
-  return $('.productList-container .productList')
+  return $('.card-wrapper')
     .map((i, element) => {
-      const name = $(element).find('.productList-title').text().trim().replace(/\s/g, ' ');
-      const link = $(element).find('.productList-link').attr('href').replace('/en/','https://www.dedicatedbrand.com/en/');
-      const price = parseInt($(element).find('.productList-link').find('.productList-price').text());
-      const image =  $(element).find('.js-lazy').attr('data-srcset');
-      const date = Date()
-      return {name, price, link,image,date};
+      const date = Date()  
+      const name = $(element).find('.card__heading').text().trim().replace(/\s/g, ' ');
+      //const link = $(element).find('.card__heading').attr('href');
+      //.replace('/products','https://shop.circlesportswear.com/products');
+      const price = parseInt($(element).find('.money').text());
+      //const image = $(element).find('.media').attr('srcset').replace('//cdn','https://cdn');
+      return {name, price,  date,};
     })
     .get();
 };
 
-
+/*document.querySelector(All)('.class')*/
 
 /**
  * Scrape all the products for a given url page

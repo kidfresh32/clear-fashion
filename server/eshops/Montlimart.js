@@ -7,22 +7,21 @@ const cheerio = require('cheerio');
  * @return {Array} products
  */
 const parse = data => {
-  setTimeout(() => {}, 450000);
   const $ = cheerio.load(data);
 
-  return $('.productList-container .productList')
+  return $('.products-list__block')
     .map((i, element) => {
-      const name = $(element).find('.productList-title').text().trim().replace(/\s/g, ' ');
-      const link = $(element).find('.productList-link').attr('href').replace('/en/','https://www.dedicatedbrand.com/en/');
-      const price = parseInt($(element).find('.productList-link').find('.productList-price').text());
-      const image =  $(element).find('.js-lazy').attr('data-srcset');
-      const date = Date()
-      return {name, price, link,image,date};
+      const date = Date()  
+      const name = $(element).find('.text-reset').text().trim().replace(/\s/g, ' ');
+      const link = $(element).find('.text-reset').attr('href');
+      const price = parseInt($(element).find('.price').text());
+      const image = $(element).find('.w-100').attr('data-full-size-image-url');
+      return {name, price, link, image, date};
     })
     .get();
 };
 
-
+/*document.querySelector(All)('.class')*/
 
 /**
  * Scrape all the products for a given url page
