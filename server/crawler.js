@@ -5,7 +5,7 @@ const fs = require('fs');
 
     async function getNavLinks() {
         try {
-          const response = await fetch('https://www.montlimart.com/');
+          const response = await fetch('https://www.circlesportswear.com/');
           const html = await response.text();
           const $ = cheerio.load(html);
       

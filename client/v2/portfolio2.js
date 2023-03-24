@@ -24,15 +24,11 @@ let currentPagination = {};
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
-const selectBrand = document.querySelector('#brand-select');
-const selectSort = document.querySelector('#sort-select');
-const selectReasonablyPriced = document.querySelector('#reasonably-select');
-const selectRecentlyReleased = document.querySelector('#recently-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
-
-
-// indicators
+const brandSelect = document.querySelector('#brand-select');
+const selectReasonablyPriced = document.querySelector('#reasonably-select');
+const selectRecentlyReleased = document.querySelector('#recently-select');
 
 let recentProducts = 0
 let lastReleaseDate = NaN;
@@ -57,10 +53,13 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12,brand='all',reasonablyPriced=false,recentlyReleased=false,sort='price-asc') => {
+
+//
+
+const fetchProducts = async (page = 1, size = 12, brand = '') => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?&size=999`+ (brand !== "all" ? `&brand=${brand}` : "")
+      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}&brand=${brand}`
     );
     const body = await response.json();
 
@@ -68,7 +67,7 @@ const fetchProducts = async (page = 1, size = 12,brand='all',reasonablyPriced=fa
       console.error(body);
       return {currentProducts, currentPagination};
     }
-    
+
     var result = body.data.result;
 
     if(reasonablyPriced){
@@ -91,9 +90,7 @@ const fetchProducts = async (page = 1, size = 12,brand='all',reasonablyPriced=fa
     else if(sort === "date-desc") {
       result.sort((a, b) => new Date(a.released) - new Date(b.released));
     }
-    
-    // indicators
-    
+
     recentProducts = result.filter(product => (new Date() - new Date(product.released)) / (1000 * 60 * 60 * 24) < 50).length;
     lastReleaseDate = result.sort((a, b) => new Date(b.released) - new Date(a.released))[0].released;
 
@@ -127,11 +124,6 @@ const fetchProducts = async (page = 1, size = 12,brand='all',reasonablyPriced=fa
   }
 };
 
-/**
- * fetch brand 
- * @return {Array} brands
- */
-
 const fetchBrands = async () => {
   try {
     const response = await fetch(
@@ -152,10 +144,9 @@ const fetchBrands = async () => {
     return body.data.result;
   } catch (error) {
     console.error(error);
+    return [];
   }
 };
-
-
 
 /**
  * Render list of products

@@ -9,20 +9,24 @@ const cheerio = require('cheerio');
 const parse = data => {
   const $ = cheerio.load(data);
 
-  return $('.card-wrapper')
+  return $('#product-grid .grid__item')
     .map((i, element) => {
-      const date = Date()  
-      const name = $(element).find('.card__heading').text().trim().replace(/\s/g, ' ');
-      //const link = $(element).find('.card__heading').attr('href');
-      //.replace('/products','https://shop.circlesportswear.com/products');
-      const price = parseInt($(element).find('.money').text());
-      //const image = $(element).find('.media').attr('srcset').replace('//cdn','https://cdn');
-      return {name, price,  date,};
+      const name = $(element)
+        .find('.full-unstyled-link')
+        .text()
+        .trim()
+        .split('\n')[0];
+      const price = parseInt(
+        $(element)
+          .find('.money')
+          .text()
+          .replace("€",'')
+      );
+
+      return {name, price};
     })
     .get();
 };
-
-/*document.querySelector(All)('.class')*/
 
 /**
  * Scrape all the products for a given url page
@@ -35,7 +39,6 @@ module.exports.scrape = async url => {
 
     if (response.ok) {
       const body = await response.text();
-
       return parse(body);
     }
 
