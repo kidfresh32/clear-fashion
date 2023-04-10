@@ -1,11 +1,12 @@
 
 const {MongoClient} = require('mongodb');
+const { connect } = require('http2');
+
 const MONGODB_URI = 'mongodb+srv://arthurclavier:arthurclavier@cluster0.orr4ybr.mongodb.net/?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
 const MONGODB_COLLECTION_NAME = 'clearfashion_collection';
 const fs = require('fs');
-const { connect } = require('http2');
-//const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+
 var globalcollection = null;
 var globaldb = null;
 var globalclient = null
@@ -22,59 +23,77 @@ async function Connect() {
     globaldb = db;
     globalclient = client;
     console.log("Connected!");
+    return collection;
 }
+module.exports = {Connect};
 
 async function insertProductsMongoDB(){
-    await Connect();
+    collection = await Connect();
     console.log("Inserting products to the MongoDB database");
     const products_to_insert = JSON.parse(fs.readFileSync('data_montlimart.json'));
     const inserted_products = await collection.insertMany(products_to_insert);
+    const products_to_insert2 = JSON.parse(fs.readFileSync('data_Dedicated.json'));
+    const inserted_products2 = await collection.insertMany(products_to_insert2);
+    const products_to_insert3 = JSON.parse(fs.readFileSync('data_circle.json'));
+    const inserted_products3 = await collection.insertMany(products_to_insert3);
     console.log(inserted_products);
+    console.log(inserted_products2);
+    console.log(inserted_products3);
     process.exit(0);
+    //module.exports = {globalcollection,globaldb,globalclient};
 }
 
-async function findByName(Name) {
-    await Connect();
-    const products = await db.collection(MONGODB_COLLECTION_NAME).find({ name: Name }).toArray();
+async function findByBrand(Name) {
+    const collection = await Connect();
+    const products = await collection.find({ brand: Name }).toArray();
     console.log(products);
+    //module.exports = {globalcollection,globaldb,globalclient};
   }
 
 
 async function findByPrice(maxPrice) {
-  await Connect();
-  const products = await globaldb.collection(MONGODB_COLLECTION_NAME).find({ price: { $lt: maxPrice } }).toArray();
+  const collection = await Connect();
+  const products = await collection.find({ price: { $lt: maxPrice } }).toArray();
   console.log(products);
+  //module.exports = {globalcollection,globaldb,globalclient};
 }
 
 async function sortByPrice() {
-    await Connect();
+  const collection =await Connect();
     db =  client.db(MONGODB_DB_NAME)
-    const products = await db.collection(MONGODB_COLLECTION_NAME).find().sort({ price: 1 }).toArray();
+    const products = await collection.find().sort({ price: 1 }).toArray();
     console.log(products);
+    //module.exports = {globalcollection,globaldb,globalclient};
+
   }
  
 async function sortByDate() {
-  await Connect();
+  const collection = await Connect();
   db =  client.db(MONGODB_DB_NAME)
-  const products = await db.collection(MONGODB_COLLECTION_NAME).find().sort({ date: -1 }).toArray();
+  const products = await collection.find().sort({ date: -1 }).toArray();
   console.log(products);
+  //module.exports = {globalcollection,globaldb,globalclient};
 }
 
-async function findByScrapedDate() {
-    await Connect();
+async function findByScrapedDate() { 
+    const collection =await Connect();
     db =  client.db(MONGODB_DB_NAME)
     const twoWeeksAgo = new Date();
     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-    const products = await db.collection(MONGODB_COLLECTION_NAME).find({ date: { $lte: twoWeeksAgo } }).toArray();
+    const products = await collection.find({ date: { $lte: twoWeeksAgo } }).toArray();
     console.log(products);
+   
   }
   
+async function findAll() {
+    const collection =await Connect();
+    db =  client.db(MONGODB_DB_NAME)
+    const products = await collection.find().toArray();
+    console.log(products);
+    
+  }
 
 
-//Connect();
-//insertProductsMongoDB();
-//findByPrice(50);
-//sortByPrice();
-//sortByDate();
-findByScrapedDate();
-//findByName("PULL POLLEN");
+
+
+

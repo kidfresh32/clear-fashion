@@ -16,7 +16,9 @@ const parse = data => {
       const link = $(element).find('.text-reset').attr('href');
       const price = parseInt($(element).find('.price').text());
       const image = $(element).find('.w-100').attr('data-full-size-image-url');
-      return {name, price, link, image, date};
+      const brand = "Montlimart";
+      return {name, price, link,image,date,brand};
+      
     })
     .get();
 };

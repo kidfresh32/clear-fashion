@@ -1,7 +1,7 @@
 /* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./eshops/dedicatedbrand');
 const montlimartbrand = require('./eshops/Montlimart');
-const circlebrand = require('./eshops/Montlimart');
+const circlebrand = require('./eshops/Circle');
 const fs = require('fs');
 const { promisify } = require('util');
 
@@ -50,16 +50,9 @@ async function sandbox (eshop = 'dedicated') {
         console.log(montlimartProducts);
         break;
 
-        case 'circle': //not functional
-          const circleLinks = require('./navLinksCir.json');
-          const circleProducts = [];
-  
-          for (let link of circleLinks) {
-            const data = await circlebrand.scrape(link);
-            circleProducts.push(...data);
-          }
-  
-          writeToFile('data_montlimart.json', circleProducts);
+        case 'circle': 
+          const circleProducts = await circlebrand.scrape('https://shop.circlesportswear.com/collections/all');
+          writeToFile('data_circle.json', circleProducts);
           console.log(circleProducts);
           break;
 

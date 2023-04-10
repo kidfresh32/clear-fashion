@@ -1,3 +1,4 @@
+
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
@@ -12,12 +13,14 @@ const parse = data => {
 
   return $('.productList-container .productList')
     .map((i, element) => {
+      
       const name = $(element).find('.productList-title').text().trim().replace(/\s/g, ' ');
       const link = $(element).find('.productList-link').attr('href').replace('/en/','https://www.dedicatedbrand.com/en/');
       const price = parseInt($(element).find('.productList-link').find('.productList-price').text());
       const image =  $(element).find('.js-lazy').attr('data-srcset');
       const date = Date()
-      return {name, price, link,image,date};
+      const brand = "Dedicated";
+      return {name, price, link,image,date,brand};
     })
     .get();
 };

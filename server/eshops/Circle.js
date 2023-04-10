@@ -11,19 +11,15 @@ const parse = data => {
 
   return $('#product-grid .grid__item')
     .map((i, element) => {
-      const name = $(element)
-        .find('.full-unstyled-link')
-        .text()
-        .trim()
-        .split('\n')[0];
-      const price = parseInt(
-        $(element)
-          .find('.money')
-          .text()
-          .replace("€",'')
-      );
-
-      return {name, price};
+      const name = $(element).find('.full-unstyled-link').text().trim().split('\n')[0];
+      const image = "https:" + $(element).find('img')[0].attribs['src']
+      var price = $(element).find('.money').text().split("€");
+      price = parseFloat(price[price.length - 1].replace(',', '.'));
+      const link =  "https://shop.circlesportswear.com" + $(element)
+      .find('.full-unstyled-link').attr("href");
+      const brand = "Circle";
+      const date = Date()
+      return {name, price, link,image,date,brand};
     })
     .get();
 };
