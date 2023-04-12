@@ -25,7 +25,7 @@ async function Connect() {
     console.log("Connected!");
     return collection;
 }
-module.exports = {Connect};
+
 
 async function insertProductsMongoDB(){
     collection = await Connect();
@@ -93,7 +93,7 @@ async function findAll() {
     
   }
 
-
+  module.exports = {Connect, findAll};
 
 
 

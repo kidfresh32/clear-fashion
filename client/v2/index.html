@@ -3,9 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Clear fashion</h1>
+    <h1>Clear Fashion</h1>
     <section id="options">
       <div id="show">
         <label for="show-select">Show:</label>
@@ -16,16 +17,12 @@
         </select>
       </div>
       <div id="page">
-        <label for="page-select">Go to page:</label>
-        <select name="page" id="page-select"> </select>
+        <label for="page-select">Page:</label>
+        <select name="page" id="page-select"></select>
       </div>
-      <div id="filters">
-        <span>By reasonable price</span>
-        <span>By recently released</span>
-        <div id="brand">
-          <label for="brand-select">By brands:</label>
-          <select name="brand" id="brand-select"> </select>
-        </div>
+      <div id="brand">
+        <label for="brand-select">Brand:</label>
+        <select name="brand" id="brand-select"></select>
       </div>
       <div id="sort">
         <label for="sort-select">Sort:</label>
@@ -36,9 +33,19 @@
           <option value="date-desc">Anciently released</option>
         </select>
       </div>
+      <div>
+      <input type="checkbox" id="showOnly-select-sale">Reasonable price<br>(less than 50€)</input>
+      </div>
+      <div>
+      <input type="checkbox" id="showOnly-select-new">
+        Recently released<br>(less than 2 weeks)
+      </input>
+      </div>
+      <div id="showOnly-select-favorite" onclick="changeFavorites()">Show favorites
+      </div>
     </section>
+    <br>
     <section id="indicators">
-      <h2>Indicators</h2>
       <div>
         <span>Number of products</span>
         <span id="nbProducts">0</span>
@@ -49,26 +56,36 @@
       </div>
       <div>
         <span>Number of new products</span>
-        <span>0</span>
+        <span id="nbRecentProducts">0</span>
       </div>
       <div>
         <span>p50 price value</span>
-        <span>0</span>
+        <span id="spanP50">0</span>
       </div>
       <div>
         <span>p90 price value</span>
-        <span>0</span>
+        <span id="spanP90">0</span>
       </div>
       <div>
         <span>p95 price value</span>
-        <span>0</span>
+        <span id="spanP95">0</span>
       </div>
       <div>
         <span>Last released date</span>
-        <span>2020-01-01</span>
+        <span id="spanLastReleased">2020-01-01</span>
       </div>
     </section>
+    <br>
     <section id="products"></section>
+    <script>
+      function loadInfo()
+      {
+      if(document.getElementById("products").innerHTML == ""){
+        document.getElementById("products").innerHTML = "First load, please wait...";
+      }
+    }
+    setTimeout(loadInfo, 200);
+    </script>
     <script type="text/javascript" charset="UTF-8" src="portfolio.js"></script>
   </body>
 </html>

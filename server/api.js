@@ -23,11 +23,14 @@ app.get('/', (request, response) => {
 
 app.get('/products/search', async (req, res) => {
   const limit = parseInt(req.query.limit) || 12; 
-  const brand = req.query.brand || 'All brands'; 
+  const brand = req.query.brand || null; 
   const price = parseInt(req.query.price) || 0; 
   try {
     collection = await MongoDB.Connect();
-    const query = { brand: brand };
+    const query = {};
+    if (brand) {
+      query.brand = brand;
+    }
     if (price > 0) {
       query.price = { $lte: price };
     }
@@ -38,6 +41,8 @@ app.get('/products/search', async (req, res) => {
     res.status(500).send('Internal server error');
   }
 });
+
+
 
 
 
@@ -59,6 +64,8 @@ app.get('/products/:id', async (req, res) => {
     res.status(500).send({ error: 'Internal server error' });
   }
 });
+
+
 
 
 
